@@ -1,0 +1,90 @@
+
+.guessBar{
+    width: 100%;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+}
+.guessBar_box{
+    width: 60%;
+    transition: all 0.5s ease;
+}
+
+.guessBar_box_guesses{
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    text-align: center;
+    padding: 1rem;
+    gap: 1rem;
+}
+
+.guessBar_box_guesses_info{
+    padding: 2rem 0rem;
+    border: 1px solid;
+}
+
+.guessBar_correct{
+    width: 5rem;
+    height: 5rem;
+    border: 1px solid;
+    border-radius: 0.5rem;
+    background-color: lightgreen;
+}
+.guessBar_incorrect{
+    width: 5rem;
+    height: 5rem;
+    border: 1px solid;
+    border-radius: 0.5rem;
+    background-color: salmon;
+}
+.guessBar_correct_box,
+.guessBar_incorrect_box{
+    display: grid;
+    margin-top: -0.5rem;
+}
+
+.guessBar_correct p{
+    padding-top: 0.5rem;
+    /* color: white; */
+}
+.guessBar_incorrect p{
+    padding: 0 .5rem 0 .5rem;
+    line-height: 1;
+    /* color: white; */
+}
+
+.guessBar_incorrect span{
+    padding-top: 2rem;
+    color: white;
+}
+.guessBar_incorrect_arrow{
+    font-size: 2rem;
+    margin-top: -1rem;
+    justify-self: center;
+    fill: maroon;
+}
+
+/* GUESS INPUT SECTION */
+.hero_box_dropdown{
+    border: 1px solid;
+    border-radius: 5rem;
+}
+
+/* GUESSES + REVEAL SECTION */
+.hero_guessBar_headers_box{
+    width: 100%;
+    text-align: center;
+    display: flex;
+    /* justify-content: space-between; */
+    border-bottom: 1px dashed;
+    /* background: blue; */
+}
+
+.hero_guessBar_headers{
+    display: grid;
+    /* background-color: blue; */
+    grid-template-columns: repeat(7, 1fr);
+    text-align: center;
+    padding: 0.5rem 0rem;
+    gap: 1rem;
+}

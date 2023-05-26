@@ -1,0 +1,21 @@
+
+.dropdown_box{
+    display: grid;
+    grid-template-columns: 5fr 1fr;
+    align-items: center;
+}
+
+.dropdown_box_left{
+    padding: 0.5rem;
+}
+
+.dropdown_box_right{
+    font-size: 3rem;
+    line-height: 0;
+    cursor: pointer;
+}
+
+.dropdown_box_right:hover{
+    scale: 0.9;
+    transition: 0.3s all ease-in;
+}
