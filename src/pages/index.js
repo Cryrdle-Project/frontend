@@ -91,6 +91,8 @@ export default function Home() {
     setSecretIndex_admin(inputValue)
   }
 
+  console.log(currentAccount  )
+  console.log("current account")
   return (
     <>
       <Head>
@@ -103,6 +105,7 @@ export default function Home() {
           <Link href="/">
             <Image src={images.logo} alt="logo" width={300} />
           </Link>
+    
           <br />
 
           {/* ----- CONNECT WALLET */}
@@ -116,6 +119,7 @@ export default function Home() {
                   currentAccount.length - 4,
                   currentAccount.length
                 )}` + " | Disconnect"}
+                wallet
           </button>
 
           {currentAccount && (
@@ -173,13 +177,18 @@ export default function Home() {
           {/* ----- DROPDOWN SECTION */}
           <br />
           <h2>Guess Bar</h2>
-          {currentAccount && isPaid && (
+          {/* {currentAccount && isPaid && ( */}
+          {( 
             <Dropdown
               coinsList={coinsList}
               onGuessMade={handleSelectedOption}
               // checkWin={handleCheckWin}
             />
           )}
+
+
+
+
 
           {/* ----- DISPLAY GUESSES */}
           {/* TODO: MOVE TO GUESSBAR COMPONENT */}

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react"
 import { ethers } from "ethers"
 import Web3Modal from "web3modal"
+import data from "./hardcoded_coins.json"
 
 // *** MOVED SOME TO BACKEND ***
 // ROUTE DEV/ADMIN CALLS TO BACKEND WHERE PROVIDER CAN BE GENERATED SAFELY FROM PRIVATE KEYS
@@ -50,16 +51,29 @@ export const CryrdleProvider = ({ children }) => {
   // listen on mount
   useEffect(() => {
     setGuesses([])
-    // async functions
-    const getCoins = async () => {
-      return await getAllCoins()
-    }
+
+ 
+    const coinsWithLabels = Object.values(data).map((coin) => {
+   
+      return {
+        ...coin,
+        label: `${coin.name} (${coin.symbol})`,
+      }
+    })
+
+    setCoinsList(coinsWithLabels)
+   
+    // const getCoins = async () => {
+      
+    //   // need to be connected to contract
+    //   // return await getAllCoins()
+    // }
     const getInfo = async () => {
       return await getCurrentGameInfo()
     }
 
     if (currentAccount) {
-      getCoins()
+      // getCoins()
       getInfo()
       getBalance()
       checkIfUserIsPaid()
@@ -138,6 +152,8 @@ export const CryrdleProvider = ({ children }) => {
       )
 
       const json = await res.json()
+      console.log(res)
+
       console.log("Current game info:", json)
       const { game, players, fee, winner } = json
       setCurrentGame(game)
