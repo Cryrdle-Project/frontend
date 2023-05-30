@@ -9,6 +9,7 @@ import data from "./hardcoded_coins.json"
 //
 //--INTERNAL IMPORTS
 import { CryrdleAddress, CryrdleABI } from "./constants"
+
 //
 // --FETCH SMART CONTRACT
 const fetchContract = (signerOrProvider) =>
@@ -47,6 +48,8 @@ export const CryrdleProvider = ({ children }) => {
   const [isPaid, setIsPaid] = useState(null)
   const [guesses, setGuesses] = useState([])
   const [coinsList, setCoinsList] = useState([])
+  const [winningCoin, setWinningCoin] = useState("")
+
 
   // listen on mount
   useEffect(() => {
@@ -54,15 +57,18 @@ export const CryrdleProvider = ({ children }) => {
 
  
     const coinsWithLabels = Object.values(data).map((coin) => {
-   
+      
       return {
         ...coin,
         label: `${coin.name} (${coin.symbol})`,
+   
       }
     })
 
     setCoinsList(coinsWithLabels)
-   
+
+    // setWinningCoin(coinsWithLabels[0])
+ 
     // const getCoins = async () => {
       
     //   // need to be connected to contract
@@ -73,6 +79,7 @@ export const CryrdleProvider = ({ children }) => {
     }
 
     if (currentAccount) {
+      console.log("re-render on state change")
       // getCoins()
       getInfo()
       getBalance()
@@ -234,6 +241,7 @@ export const CryrdleProvider = ({ children }) => {
       console.log(error)
     }
   }
+
   const setSecretIndex_admin = async (secretIndex) => {
     try {
       // const secretIndex = parseInt(secretIndex)
@@ -335,6 +343,15 @@ export const CryrdleProvider = ({ children }) => {
       .catch((error) => console.error(error))
   }
 
+  useEffect(() => {
+
+   console.log("data[0]:", coinsList[0])
+  setWinningCoin(coinsList[0])
+
+
+  }, [coinsList])
+
+  console.log("winningCoin:", winningCoin)
   return (
     <CryrdleContext.Provider
       value={{

@@ -24,8 +24,37 @@ const GuessBar = ({ guess }) => {
   //     }
   // }
 
+    const checkGuess = () => {
+        console.log("checkGuess")
+        console.log(guess)
+        console.log(winningCoin)
+        if (guess == winningCoin) {
+            console.log("correct")
+            return (
+                <div className={Style.guessBar_correct}>
+                    <span>{guess}</span>
+                </div>
+            )
+
+        }
+        // else if (guess > winningCoin) {
+        //     console.log("too high")
+        //     return (
+        //         <div className={Style.guessBar_incorrect}>
+        //             <span>{guess}</span>
+        //             <GoArrowUp
+        //                 fill="darkred"
+        //                 className={Style.guessBar_incorrect_arrow}
+        //             />
+        //         </div>
+        //     )
+        // }   
+    }
+
+
   return (
     <div className={Style.guessBar}>
+     
       <div className={Style.guessBar_box}>
         <div className={Style.guessBar_box_guesses}>
           {/* TODO: REDO LOGIC TO FOR JSON, COMPARE KEYVALUE PAIR */}
@@ -35,8 +64,10 @@ const GuessBar = ({ guess }) => {
                     - make post request to backend with guess
                     - backend compares guess to winning coin
                     */}
-          {/* checkGuess() */}
-          {/* {guess.map((el, i) =>
+          
+
+          {guess > 0 && checkGuess() && guess.map((el, i) =>
+                       
                         el == winningCoin[i] ? (
                             <div className={Style.guessBar_correct}>
                                 <span>{el}</span>
@@ -65,7 +96,7 @@ const GuessBar = ({ guess }) => {
                                 <span>{el}</span>
                             </div>
                         )
-                    )} */}
+                    )}
         </div>
       </div>
     </div>

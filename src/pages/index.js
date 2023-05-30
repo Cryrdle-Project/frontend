@@ -25,6 +25,7 @@ const CATEGORIES = [
 
 export default function Home() {
   let {
+    winningCoin,
     connectWallet,
     disconnectWallet,
     getAllUsers,
@@ -64,7 +65,10 @@ export default function Home() {
     await getSingleUser()
   }
   const handleSelectedOption = async (selectedOption) => {
+    console.log(selectedOption)
+    console.log("selectedOption")
     await setGuess(selectedOption)
+
     console.log(
       "guesses:",
       guesses.map((guess) => {
@@ -73,7 +77,9 @@ export default function Home() {
     )
   }
   const handleCheckWin = (returnedStatus) => {
+    console.log("returnedStatus: ", returnedStatus)
     if (returnedStatus) {
+
       setisWinGame(true)
       setWinScreen(true)
     }
@@ -91,8 +97,7 @@ export default function Home() {
     setSecretIndex_admin(inputValue)
   }
 
-  console.log(currentAccount  )
-  console.log("current account")
+ 
   return (
     <>
       <Head>
@@ -180,9 +185,10 @@ export default function Home() {
           {/* {currentAccount && isPaid && ( */}
           {( 
             <Dropdown
+             winningCoin={winningCoin}
               coinsList={coinsList}
               onGuessMade={handleSelectedOption}
-              // checkWin={handleCheckWin}
+              checkWin={handleCheckWin}
             />
           )}
 
@@ -203,7 +209,7 @@ export default function Home() {
             </div>
           </div>
 
-          {/* <GuessBar /> */}
+          <GuessBar />
           <div>
             {guesses &&
               guesses.map((guess, index) => (
