@@ -47,6 +47,7 @@ export const CryrdleProvider = ({ children }) => {
   const [entryFee, setEntryFee] = useState(null)
   const [isPaid, setIsPaid] = useState(null)
   const [guesses, setGuesses] = useState([])
+  const [guess, setGuess] = useState([])
   const [coinsList, setCoinsList] = useState([])
   const [winningCoin, setWinningCoin] = useState("")
 
@@ -222,18 +223,36 @@ export const CryrdleProvider = ({ children }) => {
       console.log(error)
     }
   }
-  const setGuess = async (_guess) => {
+
+    // const setGuess = async = (_guess) => {
+    //   try {
+    //     const res = await fetch(process.env.NEXT_PUBLIC_API_URL + "set-guess", {
+    //       method: "POST",
+    //       headers: {
+    //         "Content-Type": "application/json",
+    //       },
+    //       body: JSON.stringify({ address: currentAccount, guess: _guess }),
+    //     })
+    //     if (res.ok) {
+    //       const json = await res.json()
+    //       console.log("res:", json)
+    //       reRender()
+    //     }
+    //   } catch (error) {
+    //     console.log("Error while adding guess")
+    //     console.log(error)
+    //   }
+    // }
+
+
+
+  const setGuessAndRender = (_guess) => {
     try {
-      const res = await fetch(process.env.NEXT_PUBLIC_API_URL + "set-guess", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ address: currentAccount, guess: _guess }),
-      })
-      if (res.ok) {
-        const json = await res.json()
-        console.log("res:", json)
+   
+      if (_guess == winningCoin.name) {
+     
+        
+        setGuess(_guess)
         reRender()
       }
     } catch (error) {
@@ -362,13 +381,17 @@ export const CryrdleProvider = ({ children }) => {
         payEntryFee,
         setSecretIndex_admin,
         setGuess,
+        setGuessAndRender,
         reRender,
+        setGuesses,
         currentAccount,
         currentBalance,
         currentGame,
         entryFee,
         isPaid,
         guesses,
+        winningCoin,
+        guess,
         coinsList,
       }}
     >

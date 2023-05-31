@@ -32,7 +32,10 @@ export default function Home() {
     getSingleUser,
     payEntryFee,
     setSecretIndex_admin,
+    guess,
     setGuess,
+    setGuessAndRender,
+    setGuesses,
     reRender,
     currentAccount,
     currentBalance,
@@ -43,6 +46,7 @@ export default function Home() {
     coinsList,
   } = useContext(CryrdleContext)
   const [inputValue, setInputValue] = useState("")
+
 
   const handleConnectWallet = async () => {
     currentAccount ? await disconnectWallet() : await connectWallet()
@@ -64,10 +68,20 @@ export default function Home() {
   const handleGetSingleUserRequest = async () => {
     await getSingleUser()
   }
-  const handleSelectedOption = async (selectedOption) => {
-    console.log(selectedOption)
-    console.log("selectedOption")
-    await setGuess(selectedOption)
+
+  const handleSelectedOption = (selectedOption) => {
+
+    console.log("selectedOption!!!! : ", selectedOption)
+    const newArray = [...guesses, selectedOption]
+    setGuesses(newArray)
+    const chosenCoin = coinsList.map((coin) => {
+      if (coin.symbol === selectedOption) {
+        return coin
+      }
+
+    })
+
+    setGuess(selectedOption)
 
     console.log(
       "guesses:",
@@ -76,6 +90,7 @@ export default function Home() {
       })
     )
   }
+
   const handleCheckWin = (returnedStatus) => {
     console.log("returnedStatus: ", returnedStatus)
     if (returnedStatus) {
@@ -198,7 +213,7 @@ export default function Home() {
 
           {/* ----- DISPLAY GUESSES */}
           {/* TODO: MOVE TO GUESSBAR COMPONENT */}
-
+         
           <div className={Style.hero_guessBar_headers_box}>
             <div className={Style.hero_guessBar_headers}>
               {CATEGORIES.map((el, i) => (
@@ -209,17 +224,18 @@ export default function Home() {
             </div>
           </div>
 
-          <GuessBar />
+          <GuessBar guess={guess}/>
           <div>
+
             {guesses &&
               guesses.map((guess, index) => (
                 <div key={index} className={Style.hero_guessBar_headers}>
-                  <div>{JSON.parse(guess).symbol}</div>
-                  <div>{JSON.parse(guess).name}</div>
-                  <div>{JSON.parse(guess).category}</div>
-                  <div>{JSON.parse(guess).cmc_rank}</div>
+                  <div>{guess.symbol}</div>
+                  <div>{guess.name}</div>
+                  <div>{guess.category}</div>
+                  <div>{guess.cmc_rank}</div>
                   <div>
-                    {(JSON.parse(guess).marketCap / 1000000000).toLocaleString(
+                    {(guess.marketCap / 1000000000).toLocaleString(
                       undefined,
                       { maximumFractionDigits: 3 }
                     )}
@@ -227,44 +243,23 @@ export default function Home() {
                   </div>
                   <div>
                     $
-                    {JSON.parse(guess).price.toLocaleString(undefined, {
-                      maximumFractionDigits: 2,
-                    })}
+                    { guess.price
+                    // (guess.price).toLocaleString(undefined, {
+                    //   maximumFractionDigits: 2,
+                    // })
+                    }
                   </div>
                   <div>
-                    {new Date(JSON.parse(guess).date_added)
-                      .toISOString()
-                      .slice(0, 10)}
+                    {/* {
+                    new Date(guess.date_added).toISOString().slice(0, 10)
+                    } */}
+                  {guess.date_added}
                   </div>
                 </div>
               ))}
           </div>
 
-          {/* ----- ADMIN SECTION */}
-          <div>
-            <br />
-            <br />
-            <br />
-            <br />
-            <br />
-            <br />
-            <br />
-            <br />
-            <br />
-            <br />
-            <br />
-            <br />
-            <br />
-            <h2>Admin Section</h2>
-            <form onSubmit={handleSubmit}>
-              <input
-                type="text"
-                value={inputValue}
-                onChange={handleInputChange}
-              />
-              <button type="submit">Submit</button>
-            </form>
-          </div>
+        
         </div>
       </main>
     </>
