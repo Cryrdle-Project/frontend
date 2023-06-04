@@ -1,35 +1,33 @@
-import React, { useState, useContext } from "react"
-import Head from "next/head"
-import Image from "next/image"
-import Link from "next/link"
+import React, { useState, useContext } from 'react';
+import Head from 'next/head';
+import Image from 'next/image';
+import Link from 'next/link';
 // import Select from "react-select";
-import Style from "../components/GuessBar/GuessBar.module.css"
-import styles from "@/styles/Home.module.css"
-import { BiRefresh } from "react-icons/bi"
-import images from "../img/index"
-import Dropdown from "@/components/Dropdown/Dropdown"
-import { CryrdleContext } from "../context/CryrdleContext"
-import GuessBar from "@/components/GuessBar/GuessBar"
+import Style from '../components/GuessBar/GuessBar.module.css';
+import styles from '@/styles/Home.module.css';
+import { BiRefresh } from 'react-icons/bi';
+import images from '../img/index';
+import Dropdown from '@/components/Dropdown/Dropdown';
+import { CryrdleContext } from '@/context/CryrdleContext';
+import GuessBar from '@/components/GuessBar/GuessBar';
 
 // hard coded data
 const CATEGORIES = [
-  "symbol",
-  "name",
-  "category",
-  "cmc_rank",
-  "marketCap",
-  "price",
-  "date_added",
+  'symbol',
+  'name',
+  'category',
+  'cmc_rank',
+  'marketCap',
+  'price',
+  'date_added'
   // shared tags? if guess <tag> is in <coin> tan
-]
+];
 
-export default function Home() {
-  let {
+export default function Home () {
+  const {
     winningCoin,
     connectWallet,
     disconnectWallet,
-    getAllUsers,
-    getSingleUser,
     payEntryFee,
     setSecretIndex_admin,
     setGuess,
@@ -40,64 +38,55 @@ export default function Home() {
     entryFee,
     isPaid,
     guesses,
-    coinsList,
-  } = useContext(CryrdleContext)
-  const [inputValue, setInputValue] = useState("")
+    coinsList
+  } = useContext(CryrdleContext);
+  const [inputValue, setInputValue] = useState('');
 
   const handleConnectWallet = async () => {
-    currentAccount ? await disconnectWallet() : await connectWallet()
-  }
+    currentAccount ? await disconnectWallet() : await connectWallet();
+  };
 
-  //----DIRECT ON-CHAIN CALLS
+  // ----DIRECT ON-CHAIN CALLS
   const handlePayEntryFee = async () => {
     try {
-      await payEntryFee()
+      await payEntryFee();
     } catch (error) {
-      console.log("error: ", error)
+      console.log('error: ', error);
     }
-  }
+  };
 
-  //----DATABASE CALLS
-  const handleGetUsersRequest = async () => {
-    await getAllUsers()
-  }
-  const handleGetSingleUserRequest = async () => {
-    await getSingleUser()
-  }
   const handleSelectedOption = async (selectedOption) => {
-    console.log(selectedOption)
-    console.log("selectedOption")
-    await setGuess(selectedOption)
+    console.log(selectedOption);
+    console.log('selectedOption');
+    await setGuess(selectedOption);
 
     console.log(
-      "guesses:",
+      'guesses:',
       guesses.map((guess) => {
-        return guess.symbol
+        return guess.symbol;
       })
-    )
-  }
+    );
+  };
   const handleCheckWin = (returnedStatus) => {
-    console.log("returnedStatus: ", returnedStatus)
+    console.log('returnedStatus: ', returnedStatus);
     if (returnedStatus) {
-
-      setisWinGame(true)
-      setWinScreen(true)
+      setisWinGame(true);
+      setWinScreen(true);
     }
-  }
+  };
   const handleReRender = () => {
-    reRender()
-  }
+    reRender();
+  };
 
-  //----ADMIN SECTION
+  // ----ADMIN SECTION
   const handleInputChange = (event) => {
-    setInputValue(event.target.value)
-  }
+    setInputValue(event.target.value);
+  };
   const handleSubmit = (event) => {
-    event.preventDefault()
-    setSecretIndex_admin(inputValue)
-  }
+    event.preventDefault();
+    setSecretIndex_admin(inputValue);
+  };
 
- 
   return (
     <>
       <Head>
@@ -110,7 +99,8 @@ export default function Home() {
           <Link href="/">
             <Image src={images.logo} alt="logo" width={300} />
           </Link>
-    
+
+          <br />
           <br />
 
           {/* ----- CONNECT WALLET */}
@@ -119,30 +109,31 @@ export default function Home() {
             onClick={() => handleConnectWallet()}
           >
             {!currentAccount
-              ? "Connect"
+              ? 'Connect '
               : `${currentAccount.slice(0, 5)}...${currentAccount.slice(
                   currentAccount.length - 4,
                   currentAccount.length
-                )}` + " | Disconnect"}
+                )}` + ' | Disconnect '}
                 wallet
           </button>
 
-          {currentAccount && (
+          {currentAccount && (<div>
             <div>
               Balance:&nbsp;
               {currentBalance
                 ? `${currentBalance.toFixed(3)} ETH`
-                : "Loading..."}
+                : 'Loading...'}
             </div>
-          )}
+
           <br />
-          <div>{currentGame && `Game Number: ${currentGame}`}</div>
-          <div>{entryFee && `Entry Fee: ${entryFee.toFixed(3)} ETH`}</div>
+          <div>{currentGame !== null && `Game #${currentGame}`}</div>
+          <div>{entryFee !== null && `Entry Fee: ${entryFee.toFixed(3)} ETH`}</div>
 
           <br />
 
-          <br />
-          {currentAccount && !isPaid && (
+          <div>Is Paid: {isPaid ? 'Yes' : 'No'}</div>
+
+          {!isPaid && (
             <>
               <button
                 className={styles.button2}
@@ -156,34 +147,11 @@ export default function Home() {
             </>
           )}
 
-          <div>Is Paid: {isPaid ? "Yes" : "No"}</div>
-
-          {/* ----- DATABASE CHECKS */}
-          <div>
-            <br />
-            <h2>Database calls</h2>
-            <button
-              className={styles.button2}
-              onClick={() => handleGetUsersRequest()}
-            >
-              View Game Info
-            </button>
-            <br />
-
-            <button
-              className={styles.button2}
-              onClick={() => handleGetSingleUserRequest()}
-            >
-              Get My Info
-            </button>
-          </div>
-          <br />
-
           {/* ----- DROPDOWN SECTION */}
           <br />
           <h2>Guess Bar</h2>
           {/* {currentAccount && isPaid && ( */}
-          {( 
+          {(
             <Dropdown
              winningCoin={winningCoin}
               coinsList={coinsList}
@@ -191,10 +159,6 @@ export default function Home() {
               checkWin={handleCheckWin}
             />
           )}
-
-
-
-
 
           {/* ----- DISPLAY GUESSES */}
           {/* TODO: MOVE TO GUESSBAR COMPONENT */}
@@ -228,7 +192,7 @@ export default function Home() {
                   <div>
                     $
                     {JSON.parse(guess).price.toLocaleString(undefined, {
-                      maximumFractionDigits: 2,
+                      maximumFractionDigits: 2
                     })}
                   </div>
                   <div>
@@ -239,7 +203,7 @@ export default function Home() {
                 </div>
               ))}
           </div>
-
+          </div>)}
           {/* ----- ADMIN SECTION */}
           <div>
             <br />
@@ -268,5 +232,5 @@ export default function Home() {
         </div>
       </main>
     </>
-  )
+  );
 }

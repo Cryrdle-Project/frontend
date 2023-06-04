@@ -1,92 +1,88 @@
-import React, { useState, useEffect } from "react"
-import { ethers } from "ethers"
-import Web3Modal from "web3modal"
-import data from "./hardcoded_coins.json"
+import React, { useEffect, useState } from 'react';
+import { ethers } from 'ethers';
+import Web3Modal from 'web3modal';
+import data from './hardcoded_coins.json';
 
 // *** MOVED SOME TO BACKEND ***
 // ROUTE DEV/ADMIN CALLS TO BACKEND WHERE PROVIDER CAN BE GENERATED SAFELY FROM PRIVATE KEYS
 // ROUTE USER CALLS FROM FRONTEND WHERE METAMASK REQUESTS SIGNER ON CLIENT
 //
-//--INTERNAL IMPORTS
-import { CryrdleAddress, CryrdleABI } from "./constants"
+// --INTERNAL IMPORTS
+import { CryrdleABI, CryrdleAddress } from './constants';
 
 //
 // --FETCH SMART CONTRACT
 const fetchContract = (signerOrProvider) =>
-  new ethers.Contract(CryrdleAddress, CryrdleABI, signerOrProvider)
+  new ethers.Contract(CryrdleAddress, CryrdleABI, signerOrProvider);
 
 const connectToSmartContract = async () => {
   try {
-    const signer = await getSigner()
-    const contract = fetchContract(signer)
-    return contract
+    const signer = await getSigner();
+    return fetchContract(signer);
   } catch (error) {
-    console.log("Error while connecting with contract")
+    console.log('Error while connecting with contract');
+    console.error(error);
   }
-}
+};
 const getSigner = async () => {
   try {
-    const web3Modal = new Web3Modal() // library to making connection flows easy
-    const connection = await web3Modal.connect()
-    const provider = new ethers.providers.Web3Provider(connection)
-    const signer = provider.getSigner()
-    return signer
+    const web3Modal = new Web3Modal(); // library to making connection flows easy
+    const connection = await web3Modal.connect();
+    const provider = new ethers.providers.Web3Provider(connection);
+    return provider.getSigner();
   } catch (error) {
-    console.log("Error while getting signer")
+    console.log('Error while getting signer');
   }
-}
+};
 
-export const CryrdleContext = React.createContext()
+export const CryrdleContext = React.createContext();
 
 export const CryrdleProvider = ({ children }) => {
-  //---use states
-  const [render, toggleReRender] = useState(false)
-  const [currentAccount, setCurrentAccount] = useState("")
-  const [currentBalance, setCurrentBalance] = useState(0)
-  const [currentGame, setCurrentGame] = useState(0)
-  const [entryFee, setEntryFee] = useState(null)
-  const [isPaid, setIsPaid] = useState(null)
-  const [guesses, setGuesses] = useState([])
-  const [coinsList, setCoinsList] = useState([])
-  const [winningCoin, setWinningCoin] = useState("")
-
+  // ---use states
+  const [render, toggleReRender] = useState(false);
+  const [currentAccount, setCurrentAccount] = useState('');
+  const [currentBalance, setCurrentBalance] = useState(0);
+  const [currentGame, setCurrentGame] = useState(0);
+  const [entryFee, setEntryFee] = useState(null);
+  const [isPaid, setIsPaid] = useState(null);
+  const [guesses, setGuesses] = useState([]);
+  const [coinsList, setCoinsList] = useState([]);
+  const [winningCoin, setWinningCoin] = useState('');
 
   // listen on mount
   useEffect(() => {
-    setGuesses([])
+    setGuesses([]);
 
- 
     const coinsWithLabels = Object.values(data).map((coin) => {
-      
       return {
         ...coin,
-        label: `${coin.name} (${coin.symbol})`,
-   
-      }
-    })
+        label: `${coin.name} (${coin.symbol})`
 
-    setCoinsList(coinsWithLabels)
+      };
+    });
+
+    setCoinsList(coinsWithLabels);
 
     // setWinningCoin(coinsWithLabels[0])
- 
+
     // const getCoins = async () => {
-      
+
     //   // need to be connected to contract
     //   // return await getAllCoins()
     // }
     const getInfo = async () => {
-      return await getCurrentGameInfo()
-    }
+      return await getCurrentGameInfo();
+    };
 
     if (currentAccount) {
-      console.log("re-render on state change")
+      console.log('re-render on state change');
       // getCoins()
-      getInfo()
-      getBalance()
-      checkIfUserIsPaid()
-      getMyGuesses()
+      getInfo();
+      getBalance();
+      checkIfUserIsPaid();
+      getMyGuesses();
     }
-  }, [currentAccount, render]) // <-- re-render on state change
+  }, [currentAccount, render]); // <-- re-render on state change
 
   // const checkIfUserIsConnected = async () => {
   //   try {
@@ -109,258 +105,182 @@ export const CryrdleProvider = ({ children }) => {
   // }
   const connectWallet = async () => {
     try {
-      console.log("Connecting wallet...")
-      if (!window.ethereum) return console.log("Install MetaMask!")
+      console.log('Connecting wallet...');
+      if (!window.ethereum) return console.log('Install MetaMask!');
 
       const accounts = await window.ethereum.request({
-        method: "eth_requestAccounts",
-      })
-      console.log("Connected with: ", accounts[0])
-      setCurrentAccount(accounts[0])
+        method: 'eth_requestAccounts'
+      });
+      console.log('Connected with: ', accounts[0]);
+      setCurrentAccount(accounts[0]);
 
       if (currentAccount) {
-        const signer = await getSigner()
-        const balanceBN = await signer.getBalance()
-        const balanceString = ethers.utils.formatEther(balanceBN)
-        const balance = parseFloat(balanceString)
-        setCurrentBalance(balance)
+        const signer = await getSigner();
+        const balanceBN = await signer.getBalance();
+        const balanceString = ethers.utils.formatEther(balanceBN);
+        const balance = parseFloat(balanceString);
+        setCurrentBalance(balance);
       }
     } catch (error) {
-      console.log("Error while connecting to wallet")
-      console.log(error)
+      console.log('Error while connecting to wallet');
+      console.log(error);
     }
-  }
+  };
   const disconnectWallet = async () => {
     try {
-      console.log("Disconnecting wallet...")
-      if (!window.ethereum) return console.log("Install MetaMask!")
+      console.log('Disconnecting wallet...');
+      if (!window.ethereum) return console.log('Install MetaMask!');
       const accounts = await window.ethereum.request({
-        method: "eth_requestAccounts",
-      })
-      setCurrentAccount(null)
-      setGuesses([])
-      reRender()
-      console.log("Disconnected with: ", accounts[0])
+        method: 'eth_requestAccounts'
+      });
+      setCurrentAccount(null);
+      setGuesses([]);
+      reRender();
+      console.log('Disconnected with: ', accounts[0]);
     } catch (error) {
-      console.log("Error while disconnecting to wallet")
+      console.log('Error while disconnecting to wallet');
     }
-  }
+  };
 
   const reRender = () => {
-    toggleReRender(!render)
-  }
+    toggleReRender(!render);
+  };
 
   const getCurrentGameInfo = async () => {
     try {
-      if (!window.ethereum) return console.log("Install MetaMask!")
+      if (!window.ethereum) return console.log('Install MetaMask!');
+      const contract = await connectToSmartContract();
 
-      const res = await fetch(
-        process.env.NEXT_PUBLIC_API_URL + "current-game-info"
-      )
+      const currentGameBN = await contract.currentGameId();
+      const currentGame = currentGameBN.toNumber();
+      console.log('Current game id:', currentGame);
+      setCurrentGame(currentGame);
 
-      const json = await res.json()
-      console.log(res)
-
-      console.log("Current game info:", json)
-      const { game, players, fee, winner } = json
-      setCurrentGame(game)
-      setEntryFee(fee)
+      const participationFeeBN = await contract.getParticipationFee();
+      const participationFee = participationFeeBN.toNumber() / 10 ** 18;
+      console.log('The participation fee is: ', participationFee, 'ETH');
+      setEntryFee(participationFee);
     } catch (error) {
-      console.log("Error while retrieving current game info")
+      console.log('Error while retrieving current game info');
+      console.error(error);
     }
-  }
+  };
   const getBalance = async () => {
     try {
-      if (!window.ethereum) return console.log("Install MetaMask!")
-      const signer = await getSigner()
-      const balanceBN = await signer.getBalance()
-      const balanceString = ethers.utils.formatEther(balanceBN)
-      const balance = parseFloat(balanceString)
-      setCurrentBalance(balance)
-      return balance
+      if (!window.ethereum) return console.log('Install MetaMask!');
+      const signer = await getSigner();
+      const balanceBN = await signer.getBalance();
+      const balanceString = ethers.utils.formatEther(balanceBN);
+      const balance = parseFloat(balanceString);
+      setCurrentBalance(balance);
+      return balance;
     } catch (error) {
-      console.log("Error while getting balance")
+      console.log('Error while getting balance');
     }
-  }
+  };
+
   const checkIfUserIsPaid = async () => {
     try {
-      console.log("Checking if user is paid..")
-      const res = await fetch(
-        process.env.NEXT_PUBLIC_API_URL + `is-paid/${currentAccount}`
-      )
-      const data = await res.json()
-      if (data === true) {
-        setIsPaid(true)
-        // console.log("isPaid:", isPaid)
-        await createUser()
-      } else {
-        setIsPaid(false)
-        // console.log("isPaid:", isPaid)
-      }
-    } catch (error) {
-      console.log("Error while checking if user is paid")
-      // console.log(error)
-    }
-  }
+      if (!window.ethereum) return console.log('Install MetaMask!');
+      const contract = await connectToSmartContract();
+      const isPaid = await contract.paidParticipationFee(
+        currentGame,
+        currentAccount
+      );
 
-  //---CONTRACT INTERACTIONS
+      setIsPaid(isPaid);
+    } catch (error) {
+      console.log('Error while checking if user is paid');
+      console.log(error);
+    }
+  };
+
+  // ---CONTRACT INTERACTIONS
 
   const payEntryFee = async () => {
     try {
-      if (!window.ethereum) return console.log("Install MetaMask!")
-      const entryFeeWEI = entryFee * 10 ** 18
-      const contract = await connectToSmartContract()
+      if (!window.ethereum) return console.log('Install MetaMask!');
+      const entryFeeWEI = entryFee * 10 ** 18;
+      const contract = await connectToSmartContract();
       const tx = await contract.joinCryrdle({
-        value: entryFeeWEI,
-      })
-      await tx.wait()
-      console.log("Joined Cryrdle")
-      console.log("Txn hash: ", tx.hash)
-      reRender()
+        value: entryFeeWEI
+      });
+      await tx.wait();
+      console.log('Joined Cryrdle');
+      console.log('Txn hash: ', tx.hash);
+      reRender();
     } catch (error) {
-      console.log("Something went wrong while joining Cryrdle!")
-      console.log(error)
+      console.log('Something went wrong while joining Cryrdle!');
+      console.log(error);
     }
-  }
+  };
   const setGuess = async (_guess) => {
     try {
-      const res = await fetch(process.env.NEXT_PUBLIC_API_URL + "set-guess", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ address: currentAccount, guess: _guess }),
-      })
-      if (res.ok) {
-        const json = await res.json()
-        console.log("res:", json)
-        reRender()
-      }
+      if (!window.ethereum) return console.log('Install MetaMask!');
+      const entryFeeWEI = entryFee * 10 ** 18;
+      const contract = await connectToSmartContract();
+      const tx = await contract.joinCryrdle({
+        value: entryFeeWEI
+      });
+      await tx.wait();
+      console.log('Joined Cryrdle');
+      console.log('Txn hash: ', tx.hash);
+      reRender();
     } catch (error) {
-      console.log("Error while adding guess")
-      console.log(error)
+      console.log('Error while adding guess');
+      console.log(error);
     }
-  }
-
-  const setSecretIndex_admin = async (secretIndex) => {
-    try {
-      // const secretIndex = parseInt(secretIndex)
-      const res = await fetch(
-        process.env.NEXT_PUBLIC_API_URL + "set-coin-of-the-day",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ coinIdx: secretIndex }),
-        }
-      )
-      if (res.ok) {
-        const json = await res.json()
-        console.log("res:", json)
-        console.log("Txn hash: ", json.transactionHash)
-        // console.log("GameNum incremented: ", json)
-        reRender()
-      }
-    } catch (error) {
-      console.log("Error while joining Cryrdle")
-      console.log(error)
-    }
-  }
-
-  //-----USERS context
-
-  const createUser = async () => {
-    try {
-      const res = await fetch(process.env.NEXT_PUBLIC_API_URL + "create-user", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ address: currentAccount }),
-      })
-    } catch (error) {
-      console.log("Error while adding user to today's game")
-      console.log(error)
-    }
-  }
-
-  const getAllUsers = async () => {
-    const res = await fetch(process.env.NEXT_PUBLIC_API_URL + "users")
-    const json = await res.json()
-    return json.data
-  }
-
-  const getSingleUser = async () => {
-    console.log("fetching single user..")
-    const res = await fetch(
-      process.env.NEXT_PUBLIC_API_URL + `users/${currentAccount}`
-    )
-    const data = await res.json()
-    if (data == null) {
-      console.log("No user found")
-      return null
-    } else {
-      console.log("data:", data)
-      return data
-    }
-  }
+  };
 
   const getMyGuesses = async () => {
-    console.log("fetching single user..")
+    console.log('fetching single user..');
     const res = await fetch(
       process.env.NEXT_PUBLIC_API_URL + `users/guesses/${currentAccount}`
-    )
-    const data = await res.json()
+    );
+    const data = await res.json();
 
-    if (res == null) {
-      console.log("No user found")
-      return null
+    if (res === null) {
+      console.log('No user found');
+      return null;
     } else if (data.length === 0) {
-      console.log("No guesses made for this game")
-      return null
+      console.log('No guesses made for this game');
+      return null;
     } else {
-      console.log("myGuesses:", data)
-      setGuesses(data)
+      console.log('myGuesses:', data);
+      setGuesses(data);
     }
-  }
+  };
 
   // // COINS context
 
   const getAllCoins = async () => {
-    fetch(process.env.NEXT_PUBLIC_API_URL + "coins")
+    fetch(process.env.NEXT_PUBLIC_API_URL + 'coins')
       .then((response) => response.json())
       .then((data) => {
         // map through the data and add the Label field
         const coinsWithLabels = data.map((coin) => {
           return {
             ...coin,
-            label: `${coin.name} (${coin.symbol})`,
-          }
-        })
-        setCoinsList(coinsWithLabels)
+            label: `${coin.name} (${coin.symbol})`
+          };
+        });
+        setCoinsList(coinsWithLabels);
       })
-      .catch((error) => console.error(error))
-  }
+      .catch((error) => console.error(error));
+  };
 
   useEffect(() => {
+    console.log('data[0]:', coinsList[0]);
+    setWinningCoin(coinsList[0]);
+  }, [coinsList]);
 
-   console.log("data[0]:", coinsList[0])
-  setWinningCoin(coinsList[0])
-
-
-  }, [coinsList])
-
-  console.log("winningCoin:", winningCoin)
+  console.log('winningCoin:', winningCoin);
   return (
     <CryrdleContext.Provider
       value={{
         connectWallet,
         disconnectWallet,
-        getAllUsers,
-        getSingleUser,
         payEntryFee,
-        setSecretIndex_admin,
         setGuess,
         reRender,
         currentAccount,
@@ -369,10 +289,10 @@ export const CryrdleProvider = ({ children }) => {
         entryFee,
         isPaid,
         guesses,
-        coinsList,
+        coinsList
       }}
     >
       {children}
     </CryrdleContext.Provider>
-  )
-}
+  );
+};
