@@ -38,7 +38,6 @@ const getSigner = async () => {
 export const CryrdleContext = React.createContext();
 
 export const CryrdleProvider = ({ children }) => {
-<<<<<<< HEAD
   //---use states
   const [render, toggleReRender] = useState(false)
   const [currentAccount, setCurrentAccount] = useState("")
@@ -51,18 +50,10 @@ export const CryrdleProvider = ({ children }) => {
   const [coinsList, setCoinsList] = useState([])
   const [winningCoin, setWinningCoin] = useState("")
 
-=======
-  // ---use states
-  const [render, toggleReRender] = useState(false);
-  const [currentAccount, setCurrentAccount] = useState('');
-  const [currentBalance, setCurrentBalance] = useState(0);
-  const [currentGame, setCurrentGame] = useState(0);
-  const [entryFee, setEntryFee] = useState(null);
-  const [isPaid, setIsPaid] = useState(null);
-  const [guesses, setGuesses] = useState([]);
-  const [coinsList, setCoinsList] = useState([]);
-  const [winningCoin, setWinningCoin] = useState('');
->>>>>>> onchain-calls
+  useEffect(() => {
+    console.log('guesses:', guesses);
+  }, [guesses]);
+
 
   // listen on mount
   useEffect(() => {
@@ -80,22 +71,21 @@ export const CryrdleProvider = ({ children }) => {
 
     // setWinningCoin(coinsWithLabels[0])
 
-    // const getCoins = async () => {
+ 
 
-    //   // need to be connected to contract
-    //   // return await getAllCoins()
-    // }
     const getInfo = async () => {
       return await getCurrentGameInfo();
     };
 
     if (currentAccount) {
       console.log('re-render on state change');
-      // getCoins()
+      // getCoins();
       getInfo();
       getBalance();
       checkIfUserIsPaid();
-      getMyGuesses();
+
+      // fix this
+      // getMyGuesses();
     }
   }, [currentAccount, render]); // <-- re-render on state change
 
@@ -118,6 +108,14 @@ export const CryrdleProvider = ({ children }) => {
   //     console.log("Something went wrong while checking connecting to wallet")
   //   }
   // }
+
+  const getCoins = async () => {
+
+
+    //   // need to be connected to contract
+    //   // return await getAllCoins()
+    }
+
   const connectWallet = async () => {
     try {
       console.log('Connecting wallet...');
@@ -172,6 +170,7 @@ export const CryrdleProvider = ({ children }) => {
       setCurrentGame(currentGame);
 
       const participationFeeBN = await contract.getParticipationFee();
+  
       const participationFee = participationFeeBN.toNumber() / 10 ** 18;
       console.log('The participation fee is: ', participationFee, 'ETH');
       setEntryFee(participationFee);
@@ -198,12 +197,27 @@ export const CryrdleProvider = ({ children }) => {
     try {
       if (!window.ethereum) return console.log('Install MetaMask!');
       const contract = await connectToSmartContract();
-      const isPaid = await contract.paidParticipationFee(
+      const isPaid = await contract.paidParticipationFee (
         currentGame,
         currentAccount
       );
 
       setIsPaid(isPaid);
+      
+      // create TextEncoder object
+      // const encoder = new TextEncoder();
+
+      // convert string to bytearray using encode() method
+      // const bytes = encoder.encode("text");
+      // console.log("fun part");
+      
+      // const shit = await contract.executeRequest(
+      //   "source",
+      //   bytes,
+      //   ["coin"],
+      //   319,
+      //   100000);
+    
     } catch (error) {
       console.log('Error while checking if user is paid');
       console.log(error);
@@ -228,7 +242,6 @@ export const CryrdleProvider = ({ children }) => {
       console.log('Something went wrong while joining Cryrdle!');
       console.log(error);
     }
-<<<<<<< HEAD
   }
 
     // const setGuess = async = (_guess) => {
@@ -262,21 +275,6 @@ export const CryrdleProvider = ({ children }) => {
         setGuess(_guess)
         reRender()
       }
-=======
-  };
-  const setGuess = async (_guess) => {
-    try {
-      if (!window.ethereum) return console.log('Install MetaMask!');
-      const entryFeeWEI = entryFee * 10 ** 18;
-      const contract = await connectToSmartContract();
-      const tx = await contract.joinCryrdle({
-        value: entryFeeWEI
-      });
-      await tx.wait();
-      console.log('Joined Cryrdle');
-      console.log('Txn hash: ', tx.hash);
-      reRender();
->>>>>>> onchain-calls
     } catch (error) {
       console.log('Error while adding guess');
       console.log(error);
@@ -285,10 +283,12 @@ export const CryrdleProvider = ({ children }) => {
 
   const getMyGuesses = async () => {
     console.log('fetching single user..');
-    const res = await fetch(
-      process.env.NEXT_PUBLIC_API_URL + `users/guesses/${currentAccount}`
-    );
-    const data = await res.json();
+
+    if (!currentAccount) return console.log('No user found');
+    // const res = await fetch(
+    //   process.env.NEXT_PUBLIC_API_URL + `users/guesses/${currentAccount}`
+    // );
+    // const data = await res.json();
 
     if (res === null) {
       console.log('No user found');
@@ -342,13 +342,9 @@ export const CryrdleProvider = ({ children }) => {
         entryFee,
         isPaid,
         guesses,
-<<<<<<< HEAD
         winningCoin,
         guess,
         coinsList,
-=======
-        coinsList
->>>>>>> onchain-calls
       }}
     >
       {children}
