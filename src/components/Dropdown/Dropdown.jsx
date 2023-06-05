@@ -1,6 +1,8 @@
-import React, { useState } from "react"
+import React, { useState, useContext } from "react"
 import Select from "react-select"
 import { GoArrowRight } from "react-icons/go"
+import { CryrdleContext } from "../../context/CryrdleContext"
+
 
 // --INTERNAL IMPORT
 import Style from "./Dropdown.module.css"
@@ -20,7 +22,8 @@ const dropdownStyle = {
   }),
 }
 
-const Dropdown = ({ onGuessMade, checkWin, coinsList }) => {
+
+const Dropdown = ({ onGuessMade, checkWin, coinsList, winningCoin }) => {
   const [selectedOption, setSelectedOption] = useState(null)
 
   const handleChange = (selected) => {
@@ -28,11 +31,16 @@ const Dropdown = ({ onGuessMade, checkWin, coinsList }) => {
   }
 
   const handleClick = () => {
+    console.log(selectedOption ? selectedOption.symbol : "no option selected")
+    console.log(JSON.stringify(selectedOption))
+
     if (selectedOption) {
-      onGuessMade(JSON.stringify(selectedOption)) // todo: use full label?
+      onGuessMade(selectedOption.symbol) // todo: use full label?
       // JSON.parse() << reverse operation
       // onGuessMade(selectedOption.symbol) // todo: use full label?
-      // checkWin(selectedOption.symbol == winningCoin.symbol)
+      console.log(selectedOption.symbol)
+      console.log(winningCoin)
+      checkWin(selectedOption.symbol == "PPC")
       // checkWin(coins[selectedOption.symbol] == answer)
       // TODO: NEED TO ADD ADDRESS ACCOUNT FIRST + ADD GAME PERIODS
       // Axios.post(`${COINS_URL}/${selectedOption.symbol}`).then(
