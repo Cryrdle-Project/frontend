@@ -50,10 +50,6 @@ export const CryrdleProvider = ({ children }) => {
   const [coinsList, setCoinsList] = useState([])
   const [winningCoin, setWinningCoin] = useState("")
 
-  useEffect(() => {
-    console.log('guesses:', guesses);
-  }, [guesses]);
-
 
   // listen on mount
   useEffect(() => {
@@ -297,6 +293,7 @@ export const CryrdleProvider = ({ children }) => {
       console.log('No guesses made for this game');
       return null;
     } else {
+      // to do
       console.log('myGuesses:', data);
       setGuesses(data);
     }

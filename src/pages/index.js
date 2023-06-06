@@ -16,7 +16,7 @@ const CATEGORIES = [
   'symbol',
   'name',
   'category',
-  'cmc_rank',
+  'total supply',
   'marketCap',
   'price',
   'date_added'
@@ -43,7 +43,7 @@ export default function Home () {
     guesses,
     coinsList
   } = useContext(CryrdleContext);
-  const [inputValue, setInputValue] = useState('');
+  const [win, setisWinGame] = useState(false);
 
 
   const handleConnectWallet = async () => {
@@ -59,11 +59,17 @@ export default function Home () {
     }
   };
 
-  const handleSelectedOption = async (selectedOption) => {
-    console.log(selectedOption);
-    console.log('selectedOption');
-    await setGuess(selectedOption);
+  const addObjectToGuesses = (newObject) => {
+    setGuesses((guesses) => [...guesses, newObject]);
+  };
 
+  
+  const handleSelectedOption = (selectedOption) => {
+    console.log('before', guesses);
+    console.log(typeof selectedOption);
+
+    addObjectToGuesses(selectedOption);
+    console.log('after', guesses);
     console.log(
       'guesses:',
       guesses.map((guess) => {
@@ -71,25 +77,19 @@ export default function Home () {
       })
     );
   };
+
   const handleCheckWin = (returnedStatus) => {
-    console.log('returnedStatus: ', returnedStatus);
+    console.log('handleCheckWin: ', returnedStatus);
     if (returnedStatus) {
       setisWinGame(true);
-      setWinScreen(true);
+      // setWinScreen(true);
     }
   };
   const handleReRender = () => {
     reRender();
   };
 
-  // ----ADMIN SECTION
-  const handleInputChange = (event) => {
-    setInputValue(event.target.value);
-  };
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    setSecretIndex_admin(inputValue);
-  };
+
 
   return (
     <>

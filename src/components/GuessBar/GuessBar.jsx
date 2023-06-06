@@ -84,7 +84,8 @@ const GuessBar = ({ guesses }) => {
         // } 
         return 1; 
     }
-
+ 
+console.log("WTF         WWWW")
 
   return (
     <div className={Style.guessBar}>

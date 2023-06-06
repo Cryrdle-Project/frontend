@@ -23,7 +23,7 @@ const dropdownStyle = {
 }
 
 
-const Dropdown = ({ onGuessMade, checkWin, coinsList, winningCoin }) => {
+const Dropdown = ({ winningCoin, coinsList, onGuessMade, checkWin }) => {
   const [selectedOption, setSelectedOption] = useState(null)
 
   const handleChange = (selected) => {
@@ -31,16 +31,16 @@ const Dropdown = ({ onGuessMade, checkWin, coinsList, winningCoin }) => {
   }
 
   const handleClick = () => {
-    console.log(selectedOption ? selectedOption.symbol : "no option selected")
-    console.log(JSON.stringify(selectedOption))
 
+    // console.log(selectedOption ? selectedOption.symbol : "no option selected")
+    console.log("handleClick");
+    
     if (selectedOption) {
-      onGuessMade(selectedOption.symbol) // todo: use full label?
-      // JSON.parse() << reverse operation
-      // onGuessMade(selectedOption.symbol) // todo: use full label?
-      console.log(selectedOption.symbol)
-      console.log(winningCoin)
-      checkWin(selectedOption.symbol == "PPC")
+      onGuessMade(selectedOption) // todo: use full label?
+      
+      console.log("handle",selectedOption)
+      
+      checkWin(selectedOption)
       // checkWin(coins[selectedOption.symbol] == answer)
       // TODO: NEED TO ADD ADDRESS ACCOUNT FIRST + ADD GAME PERIODS
       // Axios.post(`${COINS_URL}/${selectedOption.symbol}`).then(
@@ -50,7 +50,7 @@ const Dropdown = ({ onGuessMade, checkWin, coinsList, winningCoin }) => {
 
   return (
     <div className={Style.dropdown_box}>
-      <div className={Style.dropdown_box_left}>
+      <div className="rounded-lg bg-blue-300">
         <Select
           options={coinsList}
           onChange={handleChange}
