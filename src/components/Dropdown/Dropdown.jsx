@@ -50,7 +50,7 @@ const Dropdown = ({ winningCoin, coinsList, onGuessMade, checkWin }) => {
 
   return (
     <div className={Style.dropdown_box}>
-      <div className="rounded-lg bg-blue-300">
+      <div className="rounded-lg bg-gray-300">
         <Select
           options={coinsList}
           onChange={handleChange}

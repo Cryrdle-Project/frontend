@@ -40,6 +40,7 @@ export default function Home() {
     currentGame,
     entryFee,
     isPaid,
+    
     guesses,
     coinsList,
   } = useContext(CryrdleContext);
@@ -62,13 +63,37 @@ export default function Home() {
     setGuesses((guesses) => [...guesses, newObject]);
   };
 
-  const handleSelectedOption = (selectedOption) => {
-    const res = addColors();
 
+  const addColors = (objArr) => {
+
+    const mappedArray = objArr.map(obj => {
+
+
+      let color;
+    
+      if (obj.price == winningCoin.price) {
+        color = 'green';
+      } else if (difference < winningCoin.price ||  difference > winningCoin.price ) {
+        color = 'yellow';
+      } else if (difference < winningCoin.price + 500 ||  difference > winningCoin.price + 500) {
+        color = 'red';
+      }
+    
+      return { ...obj, color };
+    });
+    console.log("after", mappedArray);
+    return mappedArray;
+  }
+
+  const handleSelectedOption = (selectedOption) => {
+    
+
+    // winningCoin
     // to do
-    // addObjectToGuesses(selectedOption);
+    addObjectToGuesses(selectedOption);
+    const updatedOption = addColors(guesses);
+
   
-    console.log("after", guesses);
     // console.log(
     //   'guesses:',
     //   guesses.map((guess) => {
@@ -97,83 +122,107 @@ export default function Home() {
 
       <main>
         <div className="h-screen items-center">
-        <div className="items-center">
-
-      
-        {currentAccount && (
-                <div className="text-s">
-                  <div>
-                    Balance:&nbsp;
-                    {currentBalance
-                      ? `${currentBalance.toFixed(3)} ETH`
-                      : "Loading..."}
-                  </div>
-
-                
-                  <div>{currentGame !== null && `Game #${currentGame}`}</div>
-                  <div className="text-m">
-                    {entryFee !== null &&
-                      `Entry Fee: ${entryFee.toFixed(3)} ETH`}
-                  </div>
-
-              
-                  <div>Is Paid: {isPaid ? "Yes" : "No"}</div>
-
-                  {!isPaid && (
-                    <>
-                      <button
-                        className="text-m"
-                        onClick={() => handlePayEntryFee()}
-                      >
-                        Pay 2 Play
-                      </button>
-                      <button onClick={() => handleReRender()}>
-                        <BiRefresh />
-                      </button>
-                    </>
-                  )}
+       
+          <div className="items-center absolute grid text-m gap-4  pt-12 pl-8 max-w-sm">
+            {currentAccount && (
+              <div className="text-m font-bold gap-4 ">
+                <div className="">
+                  Balance:&nbsp;
+                  {currentBalance
+                    ? `${currentBalance.toFixed(3)} ETH`
+                    : "Loading..."}
                 </div>
-              )}
 
+                <div>{currentGame !== null && `Game ${currentGame}`}</div>
+                <div className="text-m">
+                  {entryFee !== null && `Entry Fee: ${entryFee.toFixed(3)} ETH`}
+                </div>
 
-              {/* ----- CONNECT WALLET */}
-              <button
-                className={styles.button1}
-                onClick={() => handleConnectWallet()}
-              >
-                {!currentAccount
-                  ? "Connect "
-                  : `${currentAccount.slice(0, 5)}...${currentAccount.slice(
-                      currentAccount.length - 4,
-                      currentAccount.length
-                    )}` + " | Disconnect "}
-                wallet
-              </button>
+                <div>Is Paid: {isPaid ? "Yes" : "No"}</div>
 
-             
+                {!isPaid && (
+                  <>
+                    <button
+                      className="text-m mt-2"
+                      onClick={() => handlePayEntryFee()}
+                    >
+                      Pay 2 Play
+                    </button>
+                    <button onClick={() => handleReRender()}>
+                      <BiRefresh />
+                    </button>
+                  </>
+                )}
               </div>
+            )}
+                 {/* ----- CONNECT WALLET */}
+                 {currentAccount    && (   <button class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
 
-          <div className="w-full px-8 pt-40 pb-12 mx-auto max-w-sm">
+onClick={() => handleConnectWallet()}>
+    Disconnect wallet
+
+    <path
+      fill-rule="evenodd"
+      d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
+      clip-rule="evenodd"
+    ></path>
+  </button>)}
+
+
+
+     
+          </div>
+
+
+
+          <div class="slider-thumb "></div>
+
+
+          <div className="w-full px-8 pt-20 pb-12 mx-auto max-w-sm">
             <Link href="/">
               <Image src={images.logo} alt="logo" width={500} />
             </Link>
-
-         
           </div>
 
-      
 
-          <div className="bg-black w-full rounded-lg px-8 pt-12 pb-8 mx-auto max-w-sm">
-            <div className="mb-4">
 
-            <label className="block text-gray-700 text-sm font-bold mb-2">
-                Guess a coin and win daily collectable.
-          </label>
-          <label className="block text-gray-700 text-sm font-bold mb-8">
-                In order to start the game:
-          </label>
+   {/*  */}
+   
+   <div class="w-full mx-auto max-w-lg px-8 pt-12 pb-8 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-700/50 dark:border-gray-900/25">
+            <a href="#">
+              <h5 class="mb-4 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+              The WORDLE for crypto degens.
+              </h5>
+            </a>
+            <p class="mb-2 font-normal text-gray-700 dark:text-gray-400">
+            Guess the coin of the day and win the daily prize pool! 
+            </p>
 
-           
+            <p class="mb-12 font-normal text-gray-700 dark:text-gray-400">
+            Start by guessing a random currency below.
+            </p>
+         
+            {!currentAccount    && (   <button class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+
+onClick={() => handleConnectWallet()}>
+    Connect wallet in order to play
+<svg
+    aria-hidden="true"
+    class="w-4 h-4 ml-2 -mr-1"
+    fill="currentColor"
+    viewBox="0 0 20 20"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      fill-rule="evenodd"
+      d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
+      clip-rule="evenodd"
+    ></path>
+  </svg>
+
+  </button>)}
+   
+
 
               {currentAccount && isPaid && (
                 <Dropdown
@@ -183,10 +232,12 @@ export default function Home() {
                   checkWin={handleCheckWin}
                 />
               )}
-            </div>
-          </div>
+         
+         </div>
+          {/*  */}
 
-          {currentAccount && isPaid && (
+{currentAccount && isPaid && (
+         
             <div className="max-w-lg mx-auto mt-20 bg-gray-600 rounded-lg shadow-lg">
               <div className="grid grid-cols-7 border-solid border-lime-500">
                 {CATEGORIES.map((item) => (

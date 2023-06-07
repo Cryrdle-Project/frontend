@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { ethers } from 'ethers';
 import Web3Modal from 'web3modal';
-import data from './hardcoded_coins.json';
+// import data from './hardcoded_coins.json';
 
 // *** MOVED SOME TO BACKEND ***
 // ROUTE DEV/ADMIN CALLS TO BACKEND WHERE PROVIDER CAN BE GENERATED SAFELY FROM PRIVATE KEYS
@@ -40,7 +40,7 @@ export const CryrdleContext = React.createContext();
 export const CryrdleProvider = ({ children }) => {
   //---use states
   const [render, toggleReRender] = useState(false)
-  const [currentAccount, setCurrentAccount] = useState("")
+  const [currentAccount, setCurrentAccount] = useState("1234")
   const [currentBalance, setCurrentBalance] = useState(0)
   const [currentGame, setCurrentGame] = useState(0)
   const [entryFee, setEntryFee] = useState(null)
@@ -50,20 +50,22 @@ export const CryrdleProvider = ({ children }) => {
   const [coinsList, setCoinsList] = useState([])
   const [winningCoin, setWinningCoin] = useState("")
 
+  const getCoins = async () => {
+    return await getCoinMarketCap();
+  };
 
   // listen on mount
   useEffect(() => {
     setGuesses([]);
 
-    const coinsWithLabels = Object.values(data).map((coin) => {
-      return {
-        ...coin,
-        label: `${coin.name} (${coin.symbol})`
 
-      };
-    });
+    const data = getCoins();
+    console.log("SUCCESS", data);
+ 
 
-    setCoinsList(coinsWithLabels);
+    
+
+    setCoinsList(data);
 
     // setWinningCoin(coinsWithLabels[0])
 
@@ -105,12 +107,6 @@ export const CryrdleProvider = ({ children }) => {
   //   }
   // }
 
-  const getCoins = async () => {
-
-
-    //   // need to be connected to contract
-    //   // return await getAllCoins()
-    }
 
   const connectWallet = async () => {
     try {
@@ -232,6 +228,7 @@ export const CryrdleProvider = ({ children }) => {
       });
       await tx.wait();
       console.log('Joined Cryrdle');
+      // const test = contract.on("CryrdleJoined");
       console.log('Txn hash: ', tx.hash);
       reRender();
     } catch (error) {
@@ -299,6 +296,9 @@ export const CryrdleProvider = ({ children }) => {
     }
   };
 
+
+
+
   // // COINS context
 
   const getAllCoins = async () => {
@@ -315,6 +315,39 @@ export const CryrdleProvider = ({ children }) => {
         setCoinsList(coinsWithLabels);
       })
       .catch((error) => console.error(error));
+  };
+
+
+
+
+
+
+  const getCoinMarketCap = async () => {
+    // const secrets = { apiKey: process.env.NEXT_PUBLIC_API_URL };
+ 
+    var myHeaders = new Headers();
+  myHeaders.append("X-CMC_PRO_API_KEY", "1932ede2-c5eb-433a-8662-0023b3144390");
+
+var requestOptions = {
+  // method: 'GET',
+
+  headers: myHeaders,
+  // redirect: 'follow'
+};
+
+fetch('https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest?id=1', requestOptions)
+  .then(response => response.json())
+  .then(result => console.log("WOOORK", result))
+  .catch(error => console.log('error', error));
+
+          // const coinsWithLabels = data.map((coin) => {
+        //   return {
+        //     ...coin,
+        //     label: `${coin.name} (${coin.symbol})`
+        //   };
+        // });
+        // setCoinsList(coinsWithLabels);
+   
   };
 
   useEffect(() => {
