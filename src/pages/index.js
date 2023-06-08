@@ -251,15 +251,14 @@ export default function Home() {
                 className=""
                 src={images_index.logo}
                 alt="logo"
-                width={500}
-                height={700}
+             
               />
             </Link>
           </div>
 
           <div class="w-full mx-auto max-w-lg px-8 pt-12 pb-8 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-700/50 dark:border-gray-900/25">
             <a href="#">
-              <h5 class="mb-4 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+              <h5 class="mb-4 text-2xl text-center font-bold tracking-tight text-gray-900 dark:text-white">
                 The WORDLE for crypto degens.
               </h5>
             </a>
@@ -275,7 +274,7 @@ export default function Home() {
             )}
             {winState && (
               <>
-                <p class="mb-20 text-5xl font-normal text-blue-900 dark:text-gray-400">
+                <p class="mb-18 text-5xl font-normal text-blue-900 dark:text-gray-400">
                   CONGRATULATIONS!
                 </p>
                 <Image
@@ -286,7 +285,7 @@ export default function Home() {
                   width={300}
                 />
 
-                <h5 class="mb-4 text-2xl mt-4 font-bold tracking-tight text-gray-900 dark:text-white">
+                <h5 class="mb-4 text-2xl text-center mt-4 font-bold tracking-tight text-gray-900 dark:text-white">
                   You will recieve winning bonus on your crypto wallet $$$
                 </h5>
               </>
