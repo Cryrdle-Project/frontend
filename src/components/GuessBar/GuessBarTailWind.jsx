@@ -79,16 +79,17 @@ const GuessBarTailWind = ({ winningCoin, guesses }) => {
 
                     <td class="p-2 whitespace-nowrap">
         
-                      <div className={` text-left  ${items.color ? '' : items.price_color}`} >
-
+                      <div className={`text-center ${ items.price_color}`} >
+                    {items.price_arrow} <br/>
                         { items.quote.USD.price > 100 ? items.quote.USD.price.toLocaleString(undefined, {
                           maximumFractionDigits: 4,
-                        }) : items.quote.USD.price}
+                        }) : items.quote.USD.price.toFixed(5)}
                       </div>
                     </td>
 
                     <td class="p-2 whitespace-nowrap">
-                      <div className={`text-lg text-left  ${items.color ? '' : items.market_cap_color}`} >
+                      <div className={`text-center ${items.market_cap_color}`} >
+                      {items.market_cap_arrow} <br/>
                         {items.quote.USD.market_cap.toLocaleString(undefined, {
                           maximumFractionDigits: 0,
                         })}
@@ -96,36 +97,39 @@ const GuessBarTailWind = ({ winningCoin, guesses }) => {
                     </td>
 
                     <td class="p-2 whitespace-nowrap">
-                    <div className={` text-center  ${items.color ? '' : items.max_supply_color}`} >
-
-                        {items.max_supply ? items.max_supply : 14300002}
+                    <div className={` text-center  ${items.total_supply_color}`} >
+                                  {items.total_supply_arrow} <br/>
+                        {items.total_supply.toLocaleString(undefined, {
+                          maximumFractionDigits: 0,
+                        })}
                       </div>
                     </td>
-
                     <td class="p-2 whitespace-nowrap">
-                    <div className={` text-left  ${items.color ? '' : items.volume_24h_color}`} >
+                    <div className={` text-center ${items.volume_24h_color}`} >
 
+                    {items.volume_24h_arrow} <br/>
                         {items.quote.USD.volume_24h.toLocaleString(undefined, {
-                          maximumFractionDigits: 3,
+                          maximumFractionDigits: 2,
                         })}
                       </div>
                     </td>
 
                     <td class="p-2 whitespace-nowrap">
-                    <div className={` text-left  ${items.color ? '' : items.p_change_24h_color}`} >
-
+                    <div className={` text-center ${ items.p_change_24h_color}`} >
+                    {items.p_change_24h_arrow} <br/>
                         {items.quote.USD.percent_change_24h.toLocaleString(
                           undefined,
                           {
                             maximumFractionDigits: 3,
                           }
-                        )}{" "}
+                        )}
                         %
                       </div>
                     </td>
 
                     <td class="p-2 whitespace-nowrap">
-                    <div className={` text-center  ${items.color ? '' : items.date_added_color}`} >
+                    <div className={` text-center  ${ items.date_added_color}`} >
+                    {items.date_added_arrow} <br/>
 
                         {new Date(items.date_added).getFullYear()}
                       </div>

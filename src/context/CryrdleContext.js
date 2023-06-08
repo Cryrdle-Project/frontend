@@ -273,25 +273,7 @@ export const CryrdleProvider = ({ children }) => {
     }
   };
 
-  // const setGuess = async = (_guess) => {
-  //   try {
-  //     const res = await fetch(process.env.NEXT_PUBLIC_API_URL + "set-guess", {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify({ address: currentAccount, guess: _guess }),
-  //     })
-  //     if (res.ok) {
-  //       const json = await res.json()
-  //       console.log("res:", json)
-  //       reRender()
-  //     }
-  //   } catch (error) {
-  //     console.log("Error while adding guess")
-  //     console.log(error)
-  //   }
-  // }
+
 
   const setGuessAndRender = (_guess) => {
     try {
@@ -309,11 +291,7 @@ export const CryrdleProvider = ({ children }) => {
     console.log("fetching single user..");
 
     if (!currentAccount) return console.log("No user found");
-    // const res = await fetch(
-    //   process.env.NEXT_PUBLIC_API_URL + `users/guesses/${currentAccount}`
-    // );
-    // const data = await res.json();
-
+ 
     if (res === null) {
       console.log("No user found");
       return null;

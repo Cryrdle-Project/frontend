@@ -53,117 +53,109 @@ export default function Home() {
   };
 
   const addColors = (objArr) => {
-    const mappedArray = objArr.map((obj) => {
-      let price_color;
-      let market_cap_color;
-      let max_supply_color;
-      let volume_24h_color;
-      let p_change_24h_color;
-      let date_added_color;
+  const mappedArray = objArr.map((obj) => {
+    const {
+      price,
+      market_cap,
+      total_supply,
+      volume_24h,
+      percent_change_24h,
+      date_added,
+    } = obj.quote.USD;
+    const {
+      price: winningPrice,
+      market_cap: winningMarketCap,
+      total_supply: winningTotalSupply,
+      volume_24h: winningVolume,
+      percent_change_24h: winningPercentChange,
+      date_added: winningDateAdded,
+    } = winningCoin.quote.USD;
 
-      if (
-        obj.quote.USD.price < winningCoin.quote.USD.price + 5000 ||
-        obj.quote.USD.price > winningCoin.quote.USD.price + 5000
-      ) {
-        price_color = "bg-red-500";
-      } else if (
-        obj.quote.USD.price < winningCoin.quote.USD.price ||
-        obj.quote.USD.price > winningCoin.quote.USD.price
-      ) {
-        price_color = "bg-yellow-500";
-      } else if (obj.quote.USD.price == winningCoin.quote.USD.price) {
-        console.log("obj.price: ", obj.price);
-        console.log("obj.price: ", winningCoin.price);
-        price_color = "bg-green-500";
-      }
+    let price_color;
+    let market_cap_color;
+    let total_supply_color;
+    let volume_24h_color;
+    let p_change_24h_color;
+    let date_added_color;
 
-      if (obj.quote.USD.market_cap == winningCoin.quote.USD.market_cap) {
-        market_cap_color = "bg-green-500";
-      } else if (
-        obj.quote.USD.market_cap < winningCoin.quote.USD.market_cap ||
-        winningCoin.quote.USD.market_cap > winningCoin.quote.USD.market_cap
-      ) {
-        market_cap_color = "bg-yellow-500";
-      } else if (
-        obj.quote.USD.market_cap < winningCoin.quote.USD.market_cap + 100 ||
-        winningCoin.quote.USD.market_cap >
-          winningCoin.quote.USD.market_cap + 100
-      ) {
-        market_cap_color = "bg-red-500";
-      }
+    let price_arrow;
+    let market_cap_arrow;
+    let total_supply_arrow;
+    let volume_24h_arrow;
+    let p_change_24h_arrow;
+    let date_added_arrow;
 
-      if (obj.max_supply == winningCoin.max_supply) {
-        max_supply_color = "bg-green-500";
-      } else if (
-        obj.max_supply < winningCoin.max_supply ||
-        winningCoin.max_supply > winningCoin.max_supply
-      ) {
-        max_supply_color = "bg-yellow-500";
-      } else if (
-        obj.max_supply < winningCoin.max_supply + 100 ||
-        winningCoin.max_supply > winningCoin.max_supply + 100
-      ) {
-        max_supply_color = "bg-red-500";
-      }
-      const onum = obj.quote.USD.volume_24h.toFixed(0);
-      const wnum = winningCoin.quote.USD.volume_24h.toFixed(0);
-      console.log("some vol", wnum);
-      if (onum == wnum) {
-        volume_24h_color = "bg-green-500";
-      } else if (onum < wnum || wnum > wnum) {
-        volume_24h_color = "bg-yellow-500";
-      } else if (onum < wnum + 100 || wnum > wnum + 100) {
-        volume_24h_color = "bg-red-500";
-      }
+    if (price !== winningPrice) {
+      price_color = price < winningPrice ? "bg-yellow-500" : "bg-red-500";
+      price_arrow = price < winningPrice ? "↓" : "↑";
+    } else {
+      price_color = "bg-green-500";
+    }
 
-      if (
-        obj.quote.USD.percent_change_24h ==
-        winningCoin.quote.USD.percent_change_24h
-      ) {
-        p_change_24h_color = "bg-green-500";
-      } else if (
-        obj.quote.USD.percent_change_24h <
-          winningCoin.quote.USD.percent_change_24h ||
-        winningCoin.quote.USD.percent_change_24h >
-          winningCoin.quote.USD.percent_change_24h
-      ) {
-        p_change_24h_color = "bg-yellow-500";
-      } else if (
-        obj.quote.USD.percent_change_24h <
-          winningCoin.quote.USD.percent_change_24h + 100 ||
-        winningCoin.quote.USD.percent_change_24h >
-          winningCoin.quote.USD.percent_change_24h + 100
-      ) {
-        p_change_24h_color = "bg-red-500";
-      }
+    if (market_cap !== winningMarketCap) {
+      market_cap_color =
+        market_cap < winningMarketCap ? "bg-yellow-500" : "bg-red-500";
+      market_cap_arrow = market_cap < winningMarketCap ? "↓" : "↑";
+    } else {
+      market_cap_color = "bg-green-500";
+    }
 
-      if (obj.date_added == winningCoin.date_added) {
-        date_added_color = "bg-green-500";
-      } else if (
-        obj.date_added < winningCoin.date_added ||
-        winningCoin.date_added > winningCoin.date_added
-      ) {
-        date_added_color = "bg-yellow-500";
-      } else if (
-        obj.date_added < winningCoin.date_added + 100 ||
-        winningCoin.date_added > winningCoin.date_added + 100
-      ) {
-        date_added_color = "bg-red-500";
-      }
+    if (total_supply !== winningTotalSupply) {
+      total_supply_color =
+        total_supply < winningTotalSupply ? "bg-yellow-500" : "bg-red-500";
+      total_supply_arrow = total_supply < winningTotalSupply ? "↓" : "↑";
+    } else {
+      total_supply_color = "bg-green-500";
+    }
 
-      return {
-        ...obj,
-        price_color,
-        market_cap_color,
-        max_supply_color,
-        volume_24h_color,
-        p_change_24h_color,
-        date_added_color,
-      };
-    });
+    const onum = volume_24h.toFixed(0);
+    const wnum = winningVolume.toFixed(0);
 
-    return mappedArray;
-  };
+    if (onum !== wnum) {
+      volume_24h_color = onum < wnum ? "bg-yellow-500" : "bg-red-500";
+      volume_24h_arrow = onum < wnum ? "↓" : "↑";
+    } else {
+      volume_24h_color = "bg-green-500";
+    }
+
+    if (percent_change_24h !== winningPercentChange) {
+      p_change_24h_color =
+        percent_change_24h < winningPercentChange
+          ? "bg-yellow-500"
+          : "bg-red-500";
+      p_change_24h_arrow =
+        percent_change_24h < winningPercentChange ? "↓" : "↑";
+    } else {
+      p_change_24h_color = "bg-green-500";
+    }
+
+    if (date_added !== winningDateAdded) {
+      date_added_color =
+        date_added < winningDateAdded ? "bg-yellow-500" : "bg-red-500";
+      date_added_arrow = date_added < winningDateAdded ? "↓" : "↑";
+    } else {
+      date_added_color = "bg-green-500";
+    }
+
+    return {
+      ...obj,
+      price_color,
+      price_arrow,
+      market_cap_color,
+      market_cap_arrow,
+      total_supply_color,
+      total_supply_arrow,
+      volume_24h_color,
+      volume_24h_arrow,
+      p_change_24h_color,
+      p_change_24h_arrow,
+      date_added_color,
+      date_added_arrow,
+    };
+  });
+return mappedArray
+};
+
 
   const handleSelectedOption = (selectedOption) => {
     // winningCoin
@@ -247,12 +239,7 @@ export default function Home() {
 
           <div className="w-full px-8 pt-20 pb-12 mx-auto max-w-sm">
             <Link href="/">
-              <Image
-                className=""
-                src={images_index.logo}
-                alt="logo"
-             
-              />
+              <Image className="" src={images_index.logo} alt="logo" />
             </Link>
           </div>
 
@@ -286,7 +273,8 @@ export default function Home() {
                 />
 
                 <h5 class="mb-4 text-2xl text-center mt-4 font-bold tracking-tight text-gray-900 dark:text-white">
-                  You will recieve winning bonus on your crypto wallet $$$
+                  You will recieve winning bonus on your crypto wallet in the
+                  end of the day $$$
                 </h5>
               </>
             )}
