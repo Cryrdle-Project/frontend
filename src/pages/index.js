@@ -276,8 +276,7 @@ return mappedArray
                   unoptimized={true}
                   src={giffy}
                   alt="Animated "
-                  height={500}
-                  width={300}
+            
                 />
 
                 <h5 class="mb-4 text-2xl text-center mt-4 font-bold tracking-tight text-gray-900 dark:text-white">
@@ -338,7 +337,7 @@ return mappedArray
               </h1>
               <div class="mx-auto rounded-lg font-black mt-5 text-zinc-400 md:mt-12 md:max-w-lg text-center lg:text-lg">
                 <button class="bg-tkb border text-sm text-white py-3 px-7 rounded-full">
-                  Join Sahilnetic
+                  WEB 3.0
                 </button>
               </div>
             </div>
@@ -347,15 +346,7 @@ return mappedArray
           <footer class="bg-black pb-5">
             <div class="max-w-screen-xl px-4 pt-8 mx-auto sm:px-6 lg:px-8">
               <div class="sm:flex sm:items-center sm:justify-between">
-                <div class="flex justify-center text-teal-300 sm:justify-start">
-                  <img
-                    class="rounded-full"
-                    src="https://sahilnetic.xyz/evilcat.png"
-                    width="40"
-                    height="40"
-                  />
-                </div>
-
+         
                 <p class="mt-4 text-sm text-center text-gray-400 lg:text-right lg:mt-0">
                   T&C &nbsp; Career &nbsp; Privacy & Policy &nbsp; Developers
                 </p>
