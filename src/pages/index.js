@@ -57,19 +57,23 @@ export default function Home() {
     const {
       price,
       market_cap,
-      total_supply,
       volume_24h,
       percent_change_24h,
-      date_added,
+      
     } = obj.quote.USD;
     const {
       price: winningPrice,
       market_cap: winningMarketCap,
-      total_supply: winningTotalSupply,
+   
       volume_24h: winningVolume,
       percent_change_24h: winningPercentChange,
-      date_added: winningDateAdded,
+
     } = winningCoin.quote.USD;
+
+    let total_supply = obj.total_supply;
+    let winningTotalSupply =  winningCoin.total_supply;
+    let date_added = obj.date_added;
+    let winningDateAdded = winningCoin.date_added;
 
     let price_color;
     let market_cap_color;
@@ -100,11 +104,15 @@ export default function Home() {
       market_cap_color = "bg-green-500";
     }
 
+    console.log("total_supply_color: ", total_supply);
+    console.log("total_supply_color: ", winningTotalSupply);
     if (total_supply !== winningTotalSupply) {
-      total_supply_color =
-        total_supply < winningTotalSupply ? "bg-yellow-500" : "bg-red-500";
+     
+      total_supply_color = total_supply < winningTotalSupply ? "bg-yellow-500" : "bg-red-500";
       total_supply_arrow = total_supply < winningTotalSupply ? "↓" : "↑";
     } else {
+
+    
       total_supply_color = "bg-green-500";
     }
 
