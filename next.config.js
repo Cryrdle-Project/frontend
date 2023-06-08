@@ -2,6 +2,9 @@
 const nextConfig = {
   // reactStrictMode: true,
   reactStrictMode: false,
+  images: {
+    domains: ['media.giphy.com']
+},
   content: [
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",

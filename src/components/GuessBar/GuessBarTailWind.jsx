@@ -1,108 +1,144 @@
-import React, { useContext } from "react"
-import { GoArrowUp, GoArrowDown } from "react-icons/go"
+import React, { useContext } from "react";
+import { GoArrowUp, GoArrowDown } from "react-icons/go";
 
-const USERS_URL = "http://localhost:3999/api/v1/users"
+const USERS_URL = "http://localhost:3999/api/v1/users";
 
 //--IMPORT FROM SMART CONTRACT
-import { CryrdleContext } from "../../context/CryrdleContext"
+import { CryrdleContext } from "../../context/CryrdleContext";
 
-const GuessBarTailWind = ({ guesses }) => {
-  const { currentAccount } = useContext(CryrdleContext)
+const GuessBarTailWind = ({ winningCoin, guesses }) => {
+  const { currentAccount } = useContext(CryrdleContext);
 
-    console.log(" guess bar")
-    console.log(guesses)
+  console.log(" guess bar");
+  console.log(guesses);
 
-    // TO DO fetch wining coin from contract
-    // hard coded data
-    
-    const winningCoin = {
-		"id": 1,
-		"name": "Bitcoin",
-		"symbol": "BTC",
-		"slug": "bitcoin",
-		"num_market_pairs": 10229,
-		"date_added": "2010-07-13T00:00:00.000Z",
-		"tags": [],
-		"max_supply": 21000000,
-		"circulating_supply": 19386050,
-		"total_supply": 19386050,
-		"is_active": 1,
-		"infinite_supply": false,
-		"platform": null,
-		"cmc_rank": 1,
-		"is_fiat": 0,
-		" _supply": null,
-		"self_reported_market_cap": null,
-		"tvl_ratio": null,
-		"last_updated": "2023-05-28T11:13:00.000Z",
-        "price": 0.07252005708929064,
-		"quote": {
-			"usd": {
-				"price": 0.07252005708929064,
-				"volume_24h": 192385061.87251726,
-				"volume_change_24h": 25.448}}
-	  };
-
-      const list_a = [
-        {id: 0, color: 'green'},
-        {id: 1, color: 'red'},
-        {id: 2, color: 'yellow'},
-        {id: 3, color: 'red'},
-        {id: 4, color: 'green'},
-        {id: 5, color: 'red'},
-        {id: 6, color: 'green'},
-      ];
-
-    const checkGuess = () => {
-        if (guesses.symbol == winningCoin.symbol) {
-            console.log("correct")
-            return true
-        }
-        return 1; 
-    }
-
+  // const checkGuess = () => {
+  //     if (guesses.symbol == winningCoin.symbol) {
+  //         console.log("correct")
+  //         return true
+  //     }
+  //     return 1;
+  // }
+  // hard coded data
+  const CATEGORIES = [
+    "Name",
+    "Price",
+    "Market Cap",
+    "Total supply",
+    "Volume 24h",
+    "Percent change 24h",
+    "Date added",
+    // shared tags? if guess <tag> is in <coin> tan
+  ];
 
   return (
-<>
-          {/* {checkGuess() && ( */}
-          {guesses.map((items, index) => (
-             <div className="max-w-lg mx-auto mt-2  bg-gray-600 rounded-lg shadow-lg">
-             <div className="flex flex-wrap items-center ">
-             
-          
-                 <div key={items.id} className="p-2 flex border border-pink-300 items-center justify-center text-xs">
+    <>
+      <div class="w-full mt-40 max-w-4xl mx-auto bg-white shadow-lg rounded-sm border border-gray-200">
+        <header class="px-5 py-4 border-b border-gray-100">
+          <h2 class="font-semibold text-gray-800">Your coin guesses: </h2>
+        </header>
+        <div class="p-3">
+          <div class="overflow-x-auto">
+            <table class="table-auto w-full">
+              <thead class="text-xs font-semibold uppercase text-gray-400 bg-gray-50">
+                <tr>
+                  <th class="p-2 whitespace-nowrap">
+                    <div class="font-semibold text-left">Name</div>
+                  </th>
+                  <th class="p-2 whitespace-nowrap">
+                    <div class="font-semibold text-left">Price</div>
+                  </th>
+                  <th class="p-2 whitespace-nowrap">
+                    <div class="font-semibold text-left">Market Cap</div>
+                  </th>
+                  <th class="p-2 whitespace-nowrap">
+                    <div class="font-semibold text-center">Total supply</div>
+                  </th>
+                  <th class="p-4 whitespace-nowrap">
+                    <div class="font-semibold text-center">Volume 24h</div>
+                  </th>
+                  <th class="p-2 whitespace-nowrap">
+                    <div class="font-semibold text-center"> % change 24h</div>
+                  </th>
+                  <th class="p-2 whitespace-nowrap">
+                    <div class="font-semibold text-center">Date added</div>
+                  </th>
+                </tr>
+              </thead>
+              <tbody class="text-sm divide-y divide-gray-100">
+                {guesses.map((items, index) => (
+                  <tr>
+                    <td class="p-2 whitespace-nowrap">
+                      <div class="flex items-center">
+                        <div class=" h-10 flex-shrink-0 mr-2 "></div>
+                        <div class="font-medium text-gray-800">
+                          {items.name}
+                        </div>
+                      </div>
+                    </td>
 
-                   {items.name}
-             
-                
-                   {/* <span
-                     className={`rounded-full w-5 h-5 bg-${coin.color}-500`}
-                   >
-                    
-                   </span> */}
-                 </div>
-               
-                 <div key={items.id} className="p-2 flex items-center border border-pink-300 justify-center text-xs">
+                    <td class="p-2 whitespace-nowrap">
+        
+                      <div className={` text-left  ${items.color ? '' : items.price_color}`} >
 
-{items.symbol}
+                        {items.quote.USD.price.toLocaleString(undefined, {
+                          maximumFractionDigits: 4,
+                        })}
+                      </div>
+                    </td>
 
+                    <td class="p-2 whitespace-nowrap">
+                      <div className={`text-lg text-left  ${items.color ? '' : items.market_cap_color}`} >
+                        {items.quote.USD.market_cap.toLocaleString(undefined, {
+                          maximumFractionDigits: 0,
+                        })}
+                      </div>
+                    </td>
 
-{/* <span
-  className={`rounded-full w-5 h-5 bg-${coin.color}-500`}
->
- 
-</span> */}
-</div>
+                    <td class="p-2 whitespace-nowrap">
+                    <div className={` text-left  ${items.color ? '' : items.max_supply_color}`} >
 
-             </div>
-           </div>
-               ))}
+                        {items.max_supply ? items.max_supply : 14300002}
+                      </div>
+                    </td>
 
-  {/* )
-} */}
+                    <td class="p-2 whitespace-nowrap">
+                    <div className={` text-left  ${items.color ? '' : items.volume_24h_color}`} >
 
+                        {items.quote.USD.volume_24h.toLocaleString(undefined, {
+                          maximumFractionDigits: 3,
+                        })}
+                      </div>
+                    </td>
 
-  </>
-  )}
+                    <td class="p-2 whitespace-nowrap">
+                    <div className={` text-left  ${items.color ? '' : items.p_change_24h_color}`} >
 
-export default GuessBarTailWind
+                        {items.quote.USD.percent_change_24h.toLocaleString(
+                          undefined,
+                          {
+                            maximumFractionDigits: 3,
+                          }
+                        )}{" "}
+                        %
+                      </div>
+                    </td>
+
+                    <td class="p-2 whitespace-nowrap">
+                    <div className={` text-left  ${items.color ? '' : items.date_added_color}`} >
+
+                        {new Date(items.date_added).toISOString().slice(0, 10)}
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+};
+
+export default GuessBarTailWind;

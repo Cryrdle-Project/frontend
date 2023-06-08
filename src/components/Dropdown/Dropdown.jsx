@@ -30,6 +30,8 @@ const Dropdown = ({ winningCoin, coinsList, onGuessMade, checkWin }) => {
     setSelectedOption(selected)
   }
 
+  
+
   const handleClick = () => {
 
     // console.log(selectedOption ? selectedOption.symbol : "no option selected")
@@ -47,6 +49,7 @@ const Dropdown = ({ winningCoin, coinsList, onGuessMade, checkWin }) => {
       //     (response) => {console.log(response)})
     }
   }
+
 
   return (
     <div className={Style.dropdown_box}>
