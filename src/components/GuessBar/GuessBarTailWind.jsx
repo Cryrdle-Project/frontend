@@ -81,9 +81,9 @@ const GuessBarTailWind = ({ winningCoin, guesses }) => {
         
                       <div className={` text-left  ${items.color ? '' : items.price_color}`} >
 
-                        {items.quote.USD.price.toLocaleString(undefined, {
+                        { items.quote.USD.price > 100 ? items.quote.USD.price.toLocaleString(undefined, {
                           maximumFractionDigits: 4,
-                        })}
+                        }) : items.quote.USD.price}
                       </div>
                     </td>
 
@@ -96,7 +96,7 @@ const GuessBarTailWind = ({ winningCoin, guesses }) => {
                     </td>
 
                     <td class="p-2 whitespace-nowrap">
-                    <div className={` text-left  ${items.color ? '' : items.max_supply_color}`} >
+                    <div className={` text-center  ${items.color ? '' : items.max_supply_color}`} >
 
                         {items.max_supply ? items.max_supply : 14300002}
                       </div>
@@ -125,9 +125,9 @@ const GuessBarTailWind = ({ winningCoin, guesses }) => {
                     </td>
 
                     <td class="p-2 whitespace-nowrap">
-                    <div className={` text-left  ${items.color ? '' : items.date_added_color}`} >
+                    <div className={` text-center  ${items.color ? '' : items.date_added_color}`} >
 
-                        {new Date(items.date_added).toISOString().slice(0, 10)}
+                        {new Date(items.date_added).getFullYear()}
                       </div>
                     </td>
                   </tr>

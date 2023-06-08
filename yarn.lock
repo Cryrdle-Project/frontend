@@ -2731,8 +2731,10 @@ dom-helpers@^5.0.1:
 dom-walk@^0.1.0:
   version "0.1.2"
 
-dotenv@^16.0.3:
-  version "16.0.3"
+dotenv@^16.1.4:
+  version "16.1.4"
+  resolved "https://registry.npmjs.org/dotenv/-/dotenv-16.1.4.tgz"
+  integrity sha512-m55RtE8AsPeJBpOIFKihEmqUcoVncQIwo7x9U8ZwLEZw9ZpXboz2c+rvog+jUaJvVrZ5kBOeYQBX5+8Aa/OZQw==
 
 draht@1.0.1:
   version "1.0.1"

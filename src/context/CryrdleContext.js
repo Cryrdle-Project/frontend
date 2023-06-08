@@ -74,7 +74,9 @@ export const CryrdleProvider = ({ children }) => {
     if (currentAccount) {
 
    
-      // getCoins();
+    
+      getWinCoin();
+    
       getInfo();
       getBalance();
       checkIfUserIsPaid();
@@ -82,6 +84,7 @@ export const CryrdleProvider = ({ children }) => {
       // fix this
       // getMyGuesses();
     }
+
   }, [currentAccount, render]); // <-- re-render on state change
 
   // const checkIfUserIsConnected = async () => {
@@ -167,6 +170,7 @@ export const CryrdleProvider = ({ children }) => {
       console.error(error);
     }
   };
+
   const getBalance = async () => {
     try {
       if (!window.ethereum) return console.log("Install MetaMask!");
@@ -180,6 +184,30 @@ export const CryrdleProvider = ({ children }) => {
       console.log("Error while getting balance");
     }
   };
+
+
+  const getWinCoin = async () => {
+    try {
+      if (!window.ethereum) return console.log("Install MetaMask!");
+      const contract = await connectToSmartContract();
+      const dayCoin = await contract.coinOfTheDay();
+      const coin  = dayCoin.toNumber();
+      
+      console.log("dayCoin:", coin);
+      if (coinsList.length < coin) {
+        setWinningCoin(coinsList[coin]);
+      } else {
+        // TO DO: add logic
+        setWinningCoin(coinsList[4]);
+      }
+
+      return balance;
+    } catch (error) {
+      console.log("Error while getting balance");
+    }
+  };
+ 
+
 
   const checkIfUserIsPaid = async () => {
     try {
@@ -326,7 +354,7 @@ export const CryrdleProvider = ({ children }) => {
     };
 
     fetch(
-      "https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest?id=1,2,3,4,5,6,7,8,9,10",
+      "https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest",
       requestOptions
     )
       .then((response) => response.json())
@@ -348,12 +376,9 @@ export const CryrdleProvider = ({ children }) => {
 
   };
 
-  useEffect(() => {
-    
-    setWinningCoin(coinsList[0]);
-  }, [coinsList]);
 
-  console.log("winningCoin:", winningCoin);
+
+  
   return (
     <CryrdleContext.Provider
       value={{

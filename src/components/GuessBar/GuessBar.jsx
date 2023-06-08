@@ -23,11 +23,7 @@ const GuessBar = ({ guesses }) => {
   //         console.error(error)
   //     }
   // }
-    console.log(" guess bar")
-
-
-    console.log(guesses)
-
+ 
     // TO DO fetch wining coin from contract
     // hard coded data
     
